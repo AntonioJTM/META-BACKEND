@@ -11,7 +11,7 @@ require('dotenv').config();
 
 const socketHandler = require('./middlewares/sockets');
 
-// ==================== MANEJO GLOBAL DE ERRORES ====================
+// ============   ======== MANEJO GLOBAL DE ERRORES ====================
 
 // Manejo de excepciones no capturadas (errores síncronos críticos)
 process.on('uncaughtException', (error) => {
@@ -172,13 +172,13 @@ const folderPath = path.join(__dirname, '../../../../var/www/html');
 app.use('/FILES/static', express.static(folderPath));
 
 const login = require('./routes/routes-login');
-app.use('/login/', dbMiddleware, login());
+app.use('/mapa/v1/login/', dbMiddleware, login());
 
 const users = require('./routes/routes-users');
-app.use('/users/', dbMiddleware, users());
+app.use('/mapa/v1/users/', dbMiddleware, users());
 
 const admin = require('./routes/routes-admin');
-app.use('/NEMIWEB/', dbMiddleware, admin());
+app.use('/mapa/v1/admin/', dbMiddleware, admin());
 
 // Middleware catch-all para rutas no encontradas (debe ir después de todas las rutas)
 app.use((req, res) => {
