@@ -598,9 +598,7 @@ exports.handleUpload = async (req, res) => {
     }
 };
 
-/**
- * Función para limpiar valores de metadata que puedan venir con texto adicional de Angular o sanitización
- */
+
 function cleanMetadata(value) {
     if (!value || typeof value !== 'string') return value;
     
@@ -614,11 +612,6 @@ function cleanMetadata(value) {
     return cleaned;
 }
 
-/**
- * Función para extraer la ruta relativa desde una ruta completa del servidor
- * Convierte: /var/www/html/multimedia/videos/archivo.mp4 -> /multimedia/videos/archivo.mp4
- * O: http://localhost:3000/FILES/static/multimedia/videos/archivo.mp4 -> /multimedia/videos/archivo.mp4
- */
 function extractRelativePath(fullPath) {
     if (!fullPath) return '';
     
@@ -658,10 +651,6 @@ function extractRelativePath(fullPath) {
     return '/' + fullPath;
 }
 
-/**
- * Verifica si una ruta de miniatura es la miniatura por defecto del sistema
- * La miniatura por defecto nunca debe eliminarse
- */
 function isDefaultThumbnail(thumbnailPath) {
     if (!thumbnailPath) return false;
     const normalized = extractRelativePath(thumbnailPath);

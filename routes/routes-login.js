@@ -6,7 +6,7 @@ const { login } = require('../controllers/ADMIN/login/login.controller');
 module.exports = () => {
 
     // Login Route
-    router.post('/admin', login);
+    router.post('/login', login);
 
     return router;
 }

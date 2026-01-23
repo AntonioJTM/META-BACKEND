@@ -6,17 +6,13 @@ const uploadController = require('../controllers/ADMIN/multimedia/multimedia.con
 const viewController = require('../controllers/ADMIN/multimedia/viewMultimedia.controller');
 
 module.exports = () => {
-
     router.get('/filter-subsistemas', filtros.getSubsystemFilter);
     router.get('/filter-semestres', filtros.getSemesterFilter);
     router.get('/filter-materias', filtros.getMateriaFilter);
     router.get('/multimedia', viewController.getMultimedia);
-
     router.get('/update-status', viewController.statusMultimedia);
     router.get('/info-multimedia', viewController.infoMultimedia);
-
     router.delete('/delete-multimedia', uploadController.handleDelete)
-
 
     router.post('/upload',
         (req, res, next) => {

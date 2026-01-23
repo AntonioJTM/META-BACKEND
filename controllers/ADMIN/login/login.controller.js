@@ -1,22 +1,57 @@
+const jwt = require('jsonwebtoken');
+
 exports.login = async (req, res) => {
     try {
-        const { user, password } = req.body;
+        const { username, password } = req.body;
 
-        req.db.query('CALL AT_APP_LoginCorreo(?, ?)', [user, password],
+        if (!username || !password) {
+            return res.status(400).json({
+                success: false,
+                status: 'BAD_REQUEST',
+                message: "Username y password son requeridos"
+            });
+        }
+
+        req.db.query(
+            'SELECT USU_ID, USU_USUARIO, USU_STATUS FROM MET_USUARIO_ADMIN WHERE USU_USUARIO = ? AND USU_PASSWORD = ? AND USU_STATUS = 1',
+            [username, password],
             (error, results) => {
                 if (error) {
+                    console.error("Error en la consulta:", error);
+                    return res.status(500).json({
+                        success: false,
+                        status: 'ERROR',
+                        message: "Error en el servidor"
+                    });
+                }
+
+                // Verificar si hay resultados
+                if (!results || results.length === 0) {
                     return res.status(401).json({
                         success: false,
                         status: 'NOT_FOUND',
                         message: "Usuario inactivo o credenciales inválidas"
                     });
                 }
-                const user = results[0][0];
+
+                const userData = results[0];
+                const usernameFromDb = userData.USU_USUARIO;
+
+                const JWT_SECRET = process.env.JWT_SECRET || 'tu-secret-key-cambiar-en-produccion';
+                const token = jwt.sign(
+                    {
+                        userId: userData.USU_ID,
+                        username: usernameFromDb,
+                        userType: 'admin'
+                    },
+                    JWT_SECRET,
+                    { expiresIn: '24h' }
+                );
+
                 res.status(200).json({
-                    success: true,
-                    message: "Login exitoso",
-                    status: 'OK',
-                    userId: user.USU_NOMBRE,
+                    token: token,
+                    username: usernameFromDb,
+                    userType: 'admin'
                 });
             }
         );
